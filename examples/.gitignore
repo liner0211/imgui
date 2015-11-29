@@ -30,5 +30,16 @@ opengl3_example/opengl3_example
 *.exe
 *.pdb
 
+## Android Studio / Gradle files
+android_example/app/src/main/obj/
+android_example/app/src/main/libs/
+android_example/app/src/main/jni/SDL2
+android_example/app/build/
+android_example/app/*.apk
+android_example/.gradle
+android_example/.idea/workspace.xml
+android_example/.idea/libraries
+android_example/local.properties
+
 ## Ini files
 imgui.ini
