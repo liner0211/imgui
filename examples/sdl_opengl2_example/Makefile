@@ -13,8 +13,9 @@
 
 #CXX = g++
 #CXX = clang++
+CXX = em++
 
-EXE = sdl_opengl2_example
+EXE = sdl_opengl2_example.html
 SOURCES = main.cpp imgui_impl_sdl_gl2.cpp
 SOURCES += ../../imgui.cpp ../../imgui_demo.cpp ../../imgui_draw.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
@@ -24,10 +25,13 @@ UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS = -lGL -ldl `sdl2-config --libs`
+	#LIBS = -lGL -ldl `sdl2-config --libs`
+	LIBS = -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 -s LEGACY_GL_EMULATION=1
+	#FULL_ES2=1
 
-	CXXFLAGS = -I../../  `sdl2-config --cflags`
+	CXXFLAGS = -I../../  `sdl2-config --cflags` -g2
 	CXXFLAGS += -Wall -Wformat
+#	CXXFLAGS += --embed-file imgui.ini
 	CFLAGS = $(CXXFLAGS)
 endif
 
@@ -51,10 +55,10 @@ endif
 
 
 %.o:%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LIBS)
 
 %.o:../../%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LIBS)
 
 all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
