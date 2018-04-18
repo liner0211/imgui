@@ -13,8 +13,9 @@
 
 #CXX = g++
 #CXX = clang++
+CXX = em++
 
-EXE = sdl_opengl3_example
+EXE = sdl_opengl3_example.html
 SOURCES = main.cpp imgui_impl_sdl_gl3.cpp
 SOURCES += ../../imgui.cpp ../../imgui_demo.cpp ../../imgui_draw.cpp
 SOURCES += ../libs/gl3w/GL/gl3w.c
@@ -25,7 +26,8 @@ UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS = -lGL -ldl `sdl2-config --libs`
+#	LIBS = -lGL -ldl `sdl2-config --libs`
+	LIBS = -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 -s FULL_ES2=1
 
 	CXXFLAGS = -I../../ -I../libs/gl3w `sdl2-config --cflags`
 	CXXFLAGS += -Wall -Wformat
