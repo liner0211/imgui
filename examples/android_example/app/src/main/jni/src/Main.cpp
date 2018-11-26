@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     ss << "\nGL Version   : " << version;
     ss << "\nGLSL Version : " << glslVersion;
     ss << "\n-------------------------------------------------------------\n";
-    SDL_Log(ss.str().c_str());
+    SDL_Log("%s", ss.str().c_str());
 
     ImVec4 imClearColor = ImColor(114, 144, 154);
 
