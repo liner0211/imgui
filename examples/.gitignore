@@ -34,7 +34,6 @@ example_glfw_opengl3/example_glfw_opengl3
 example_sdl_opengl2/example_sdl_opengl2
 example_sdl_opengl3/example_sdl_opengl3
 
-<<<<<<< HEAD
 ## Android Studio / Gradle files
 android_example/app/src/main/obj/
 android_example/app/src/main/libs/
@@ -47,7 +46,5 @@ android_example/.idea/libraries
 android_example/local.properties
 
 ## Ini files
-=======
 ## Dear ImGui Ini files
->>>>>>> 35d648341b6bbf030512605952814815c58e1104
 imgui.ini

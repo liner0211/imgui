@@ -206,7 +206,6 @@ example_sdl_opengl2/
     state, and might confuse your GPU driver. One star, not recommended. 
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl2.cpp
 
-<<<<<<< HEAD
 android_example/
 	Android example.
 	Uses SDL2 to build the project (see android_example/README.md for build instructions).
@@ -214,13 +213,11 @@ android_example/
 
 sdl_opengl_example/
     SDL2 + OpenGL example.
-=======
 example_sdl_opengl3/
     SDL2 (Win32, Mac, Linux, etc.) + OpenGL3+/ES2/ES3 example.
     This uses more modern OpenGL calls and custom shaders. 
     Prefer using that if you are using modern OpenGL in your application (anything with shaders).
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl3.cpp
->>>>>>> 35d648341b6bbf030512605952814815c58e1104
 
 example_sdl_vulkan/
     SDL2 (Win32, Mac, Linux, etc.) + Vulkan example.
