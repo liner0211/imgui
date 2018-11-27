@@ -11,7 +11,7 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
-#include "imgui_impl_sdl_gles2.h"
+#include "imgui_impl_sdl.h"
 
 /* Must use exact parameters here or else there will be an undefined reference to SDL_main */
 int main(int argc, char** argv)
@@ -127,7 +127,8 @@ int main(int argc, char** argv)
         if (showTestWindow)
         {
             ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_FirstUseEver);
-            ImGui::ShowTestWindow(&showTestWindow);
+            //ImGui::ShowTestWindow(&showTestWindow);
+            ImGui::ShowTestWindow();
         }
 
         //float time = static_cast<float>(SDL_GetTicks() / 1000);
