@@ -40,6 +40,7 @@ android_example/.gradle
 android_example/.idea/workspace.xml
 android_example/.idea/libraries
 android_example/local.properties
+android_example/.idea
 
 ## Ini files
 imgui.ini
