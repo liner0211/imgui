@@ -8,7 +8,6 @@
 # https://hg.libsdl.org/SDL/file/default/docs/README-android.md
 
 # Java package name: "org.libdearimgui.android"
-# cpp switches: -std=c++11 -fexceptions -Wall -Wformat
 
 # TODO list:
 # Download Android SDK (26+) and export path so we can use 'tools', 'platform-tools'
