@@ -16,3 +16,6 @@ Additionally you can just copy and paste the SDL2 directory into the jni directo
 the SDL2 directory or link is specifically called "SDL2".
 4. Run ```c ndk-build``` from the Android Studio terminal.
 5. Connect your Android device (emulator most likely will not work!), run the app, and select your device.
+
+## Additional Information and Resources
+ - [SDL Android Readme](https://hg.libsdl.org/SDL/file/default/docs/README-android.md)

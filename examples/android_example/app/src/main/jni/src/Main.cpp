@@ -13,10 +13,11 @@
 
 #include "imgui_impl_sdl_gles2.h"
 
-/* Must use exact parameters here or else there will be an undefined reference to SDL_main */
+// Must use exact parameters here or else there will be an undefined reference to SDL_main
 int main(int argc, char** argv)
 {
-    /* Initialize SDL library */
+/*
+    // Initialize SDL library
     SDL_Window* sdlWindow = 0;
     SDL_GLContext sdlGL = 0;
 
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
     // Setup ImGui binding
     ImGui_ImplSdlGLES2_Init(sdlWindow);
 
-    /* Query OpenGL device information */
+    // Query OpenGL device information
     const GLubyte* renderer = glGetString(GL_RENDERER);
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* version = glGetString(GL_VERSION);
@@ -75,7 +76,7 @@ int main(int argc, char** argv)
     ss << "\nGL Version   : " << version;
     ss << "\nGLSL Version : " << glslVersion;
     ss << "\n-------------------------------------------------------------\n";
-    SDL_Log(ss.str().c_str());
+    SDL_Log("%s", ss.str().c_str());
 
     ImVec4 imClearColor = ImColor(114, 144, 154);
 
@@ -140,9 +141,8 @@ int main(int argc, char** argv)
 
         ImGui::Render();
 
-        /* Swap OpenGL render buffers */
         SDL_GL_SwapWindow(sdlWindow);
-    } /* while !done */
+    } // while !done
 
     // Cleanup
     ImGui_ImplSdlGLES2_Shutdown();
@@ -150,6 +150,10 @@ int main(int argc, char** argv)
     SDL_GL_DeleteContext(sdlGL);
     SDL_DestroyWindow(sdlWindow);
     SDL_Quit();
-
+*/
+    while(1) {
+        static int counter = 0;
+        printf("Hello my name is, %d\n", counter++);
+    }
     return EXIT_SUCCESS;
-} /* main */
+} // main
