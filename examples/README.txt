@@ -119,6 +119,7 @@ List of high-level Frameworks Bindings in this repository: (combine Platform + R
 
     imgui_impl_allegro5.cpp
     imgui_impl_marmalade.cpp
+    ADD_ANDROID_SDL_IMPL_HERE? <-----
 
 Third-party framework, graphics API and languages bindings are listed at:
 
@@ -207,6 +208,9 @@ example_sdl_opengl2/
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl2.cpp
 
 android_example/
+1. Download [Android Studio and Android SDK tools](https://developer.android.com/sdk/index.html), 
+and the [Android NDK](https://developer.android.com/ndk/downloads/index.html) (tested with NDK-r10e).
+2. Export the Android SDK and NDK PATH ```c export PATH=$PATH:/home/<usr>/Android/android-ndk-r10e```
 	Android example.
 	Uses SDL2 to build the project (see android_example/README.md for build instructions).
 	Also uses OpenGL ES 2 for rendering.
