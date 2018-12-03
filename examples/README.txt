@@ -207,13 +207,12 @@ example_sdl_opengl2/
     state, and might confuse your GPU driver. One star, not recommended. 
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl2.cpp
 
-android_example/
-1. Download [Android Studio and Android SDK tools](https://developer.android.com/sdk/index.html), 
-and the [Android NDK](https://developer.android.com/ndk/downloads/index.html) (tested with NDK-r10e).
-2. Export the Android SDK and NDK PATH ```c export PATH=$PATH:/home/<usr>/Android/android-ndk-r10e```
-	Android example.
-	Uses SDL2 to build the project (see android_example/README.md for build instructions).
-	Also uses OpenGL ES 2 for rendering.
+android_sdl2_example/
+    You will need the Android SDK+NDK. You don't need Android Studio but it can make things easier!
+    1. Download Android SDK, https://developer.android.com/sdk/index.html, install API 18 at least.
+    2. Download latest Android NDK, https://developer.android.com/ndk/downloads/index.html, NDK-r15c or higher.
+    3. Export the Android SDK and NDK PATH `export PATH=$PATH:~/Android/android-ndk-r15c`. 
+        You should be able to run `ndk-build`, `adb ...`, and `gradle ...` commands in terminal.
 
 sdl_opengl_example/
     SDL2 + OpenGL example.
