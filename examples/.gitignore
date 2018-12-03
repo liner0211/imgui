@@ -46,6 +46,7 @@ android_sdl2_example/gradle/*
 android_sdl2_example/build.gradle
 android_sdl2_example/.gradle
 android_sdl2_example/.settings
+android_sdl2_example/.project
 
 android_sdl2_example/app/proguard-rules.pro
 android_sdl2_example/app/libs/*
