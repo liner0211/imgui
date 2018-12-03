@@ -1,0 +1,4 @@
+#Sun Dec 02 23:27:26 MST 2018
+base.0=/home/zach/code/imgui/examples/android_sdl2_example/app/build/intermediates/transforms/dexMerger/debug/0
+renamed.0=classes.dex
+path.0=classes.dex

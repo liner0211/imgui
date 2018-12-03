@@ -18,8 +18,6 @@ SDL2_LATEST='https://www.libsdl.org/release/SDL2-2.0.9.tar.gz'
 
 # Example commands for setting up 'Dear ImGui' Android project
 wget -O "SDL2.tar.gz" $SDL2_LATEST && tar xzf SDL2.tar.gz
-# Shouldn't need to create the directory, will need to change this and untar it and move components
-mkdir $DIR_NAME
 cp -r ./SDL2/android-project/* ./$DIR_NAME
 cd $DIR_NAME/app/jni/src
 ln -s ../../../SDL2 ../SDL
