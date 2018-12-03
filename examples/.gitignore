@@ -36,3 +36,9 @@ example_sdl_opengl3/example_sdl_opengl3
 
 ## Dear ImGui Ini files
 imgui.ini
+
+## Android, Gradle files
+android_sdl2_example/app/libs/*
+android_sdl2_example/app/obj/*
+android_sdl2_example/app/.externalNativeBuild
+android_sdl2_example/app/.settings
