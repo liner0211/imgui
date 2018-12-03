@@ -42,3 +42,5 @@ android_sdl2_example/app/libs/*
 android_sdl2_example/app/obj/*
 android_sdl2_example/app/.externalNativeBuild
 android_sdl2_example/app/.settings
+android_sdl2_example/.gradle
+android_sdl2_example/.settings
