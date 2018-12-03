@@ -22,23 +22,6 @@ cp -rn ./SDL2-2.0.9/android-project/* ./$DIR_NAME
 cd $DIR_NAME/app/jni/src
 ln -s ../../../SDL2-2.0.9 ../SDL
 
-# Copy or Link Dear ImGui library into src directory
-
-# Copy necessary impl files that get imgui to work
-
-# Edit Application.mk so that c++_shared is being used, add exceptions if necessary
-
-# Edit the Android.mk files so that the CPP/ImGui files are being compiled
-
-# Edit the AndroidManifest app_name and activity, strings.xml, and create an extended SDLActivity
-# Edit the package names
-# Make sure this is on the Java side and not the JNI side
-
-# Copy resources (ic_launcher.png's)
-
-# Need to link ImGui files
-
-
 # Build and Run commands
 # ./gradlew installDebug
 
