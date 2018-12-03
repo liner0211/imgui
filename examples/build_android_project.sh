@@ -17,10 +17,10 @@ DIR_NAME="android_sdl2_example"
 SDL2_LATEST='https://www.libsdl.org/release/SDL2-2.0.9.tar.gz'
 
 # Example commands for setting up 'Dear ImGui' Android project
-wget -O "SDL2.tar.gz" $SDL2_LATEST && tar xzf SDL2.tar.gz
-cp -r ./SDL2/android-project/* ./$DIR_NAME
+wget $SDL2_LATEST && tar xzf SDL2-2.0.9.tar.gz
+cp -rn ./SDL2-2.0.9/android-project/* ./$DIR_NAME
 cd $DIR_NAME/app/jni/src
-ln -s ../../../SDL2 ../SDL
+ln -s ../../../SDL2-2.0.9 ../SDL
 
 # Copy or Link Dear ImGui library into src directory
 
@@ -40,7 +40,7 @@ ln -s ../../../SDL2 ../SDL
 
 
 # Build and Run commands
-./gradlew installDebug
+# ./gradlew installDebug
 
 # adb commands:
 #  - adb devices, adb logcat
