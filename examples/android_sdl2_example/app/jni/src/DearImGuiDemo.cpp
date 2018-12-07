@@ -57,29 +57,26 @@ private:
     GLint   uniform_loc_offset;
     GLint   uniform_loc_C;
 
-public:
-    bool paused;
-    float time_offset; float zoom; float x_offset; float y_offset;
-
-public:
-    JuliaFractal(bool paused = false,
-        float time_offset = 0.0f,
-        float zoom = 0.0f,
-        float x_offset = 0.0f,
-        float y_offset = 0.0f)
-    : paused(paused), time_offset(time_offset), zoom(zoom), x_offset(x_offset), y_offset(y_offset)
+private:
+    // this is copied from imgui_impl_opengl3, where it has a private static variant
+    bool check_shader(GLuint handle, const char* desc)
     {
-        initOpenGl();
+        GLint status = 0, log_length = 0;
+        glGetShaderiv(handle, GL_COMPILE_STATUS, &status);
+        glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
+        if ((GLboolean)status == GL_FALSE)
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "ERROR: failed to compile %s!\n", desc);
+        if (log_length > 0)
+        {
+            ImVector<char> buf;
+            buf.resize((int)(log_length + 1));
+            glGetShaderInfoLog(handle, log_length, NULL, (GLchar*)buf.begin());
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "%s\n", buf.begin());
+        }
+        return (GLboolean)status == GL_TRUE;
     }
 
-    void shutdown()
-    {
-        glDeleteTextures(1, &palette_texture);
-        glDeleteVertexArrays(1, &vao);
-        glDeleteProgram(program);
-    }
-
-    void initOpenGl()
+      void initOpenGl()
     {
         static const unsigned char palette[] = {
     0xFF, 0x00, 0x00, 0xFF, 0x0E, 0x03, 0xFF, 0x1C,
@@ -184,26 +181,26 @@ public:
 
         static const char * vs_source[] =
         {
-            "// Julia set renderer - Vertex Shader                                                  \n"
-            "// Graham Sellers                                                                      \n"
-            "// OpenGL SuperBible                                                                   \n"
-            "#version 300 es                                                                        \n"
-            "                                                                                       \n"
-            "// Zoom factor                                                                         \n"
-            "uniform float zoom;                                                                    \n"
-            "                                                                                       \n"
-            "// Offset vector                                                                       \n"
-            "uniform vec2 offset;                                                                   \n"
-            "                                                                                       \n"
-            "out vec2 initial_z;                                                                    \n"
-            "                                                                                       \n"
+            "// Julia set renderer - Vertex Shader\n"
+            "// Graham Sellers\n"
+            "// OpenGL SuperBible\n"
+            "#version 300 es\n"
+            "\n"
+            "// Zoom factor\n"
+            "uniform float zoom;\n"
+            "\n"
+            "// Offset vector\n"
+            "uniform vec2 offset;\n"
+            "\n"
+            "out vec2 initial_z;\n"
+            "\n"
             "void main(void)                                                                        \n"
             "{                                                                                      \n"
             "    const vec4 vertices[4] = vec4[4](vec4(-1.0, -1.0, 0.5, 1.0),                       \n"
             "                                     vec4( 1.0, -1.0, 0.5, 1.0),                       \n"
             "                                     vec4( 1.0,  1.0, 0.5, 1.0),                       \n"
             "                                     vec4(-1.0,  1.0, 0.5, 1.0));                      \n"
-            "    initial_z = (vertices[gl_VertexID].xy * zoom) + offset;                            \n"
+            "    initial_z = (vec2(vertices[gl_VertexID]) * zoom) + offset;                            \n"
             "    gl_Position = vertices[gl_VertexID];                                               \n"
             "}                                                                                      \n"
         };
@@ -235,11 +232,10 @@ public:
             "        Z = Z_squared + C;                                                             \n"
             "        iterations++;                                                                  \n"
             "    }                                                                                  \n"
-            "    color = vec4(1.0, 1.0, 1.0, 1.0);                                                                                  \n"
-            "    //if (iterations == max_iterations)                                                  \n"
-            "      //  color = vec4(0.0, 0.0, 0.0, 1.0);                                              \n"
-            "    //else                                                                               \n"
-            "      //  color = texture(tex_gradient, vec2(float(iterations) / float(max_iterations), 1.0f));      \n"
+            "    if (iterations == max_iterations)                                                  \n"
+            "        color = vec4(0.0, 0.0, 0.0, 1.0);                                              \n"
+            "    else                                                                               \n"
+            "        color = texture(tex_gradient, vec2(float(iterations) / float(max_iterations), 1.0f));      \n"
             "}                                                                                      \n"
         };
 
@@ -248,9 +244,19 @@ public:
         glShaderSource(fs, 1, fs_source, NULL);
         glCompileShader(fs);
 
+        if (!check_shader(fs, "fragment_shader glsl es 3"))
+        {
+          
+        }
+
         GLuint vs = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vs, 1, vs_source, NULL);
         glCompileShader(vs);
+
+        if (!check_shader(vs, "vertex_shader glsl es 3"))
+        {
+
+        }
 
         glAttachShader(program, vs);
         glAttachShader(program, fs);
@@ -269,6 +275,28 @@ public:
         glTexStorage2D(GL_TEXTURE_2D, 8, GL_RGB8, 256, 1);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 1, GL_RGB, GL_UNSIGNED_BYTE, palette);
         glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+public:
+    bool paused;
+    float time_offset; float zoom; float x_offset; float y_offset;
+
+public:
+    JuliaFractal(bool paused = false,
+        float time_offset = 0.0f,
+        float zoom = 0.0f,
+        float x_offset = 0.0f,
+        float y_offset = 0.0f)
+    : paused(paused), time_offset(time_offset), zoom(zoom), x_offset(x_offset), y_offset(y_offset)
+    {
+        initOpenGl();
+    }
+
+    void shutdown()
+    {
+        glDeleteTextures(1, &palette_texture);
+        glDeleteVertexArrays(1, &vao);
+        glDeleteProgram(program);
     }
 
     void render()
@@ -397,53 +425,53 @@ int main(int argc, char** argv)
         julia_fractal.render();
 
         // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        // ImGui_ImplSdlGLES2_NewFrame();
-        ImGui::NewFrame();
+        // ImGui_ImplOpenGL3_NewFrame();
+        // ImGui_ImplSDL2_NewFrame(window);
+        // // ImGui_ImplSdlGLES2_NewFrame();
+        // ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+        // // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        // if (show_demo_window)
+        //     ImGui::ShowDemoWindow(&show_demo_window);
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+        // // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        // {
+        //     static float f = 0.0f;
+        //     static int counter = 0;
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        //     ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
+        //     ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        //     ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        //     ImGui::Checkbox("Another Window", &show_another_window);
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+        //     ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        //     ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
+        //     if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+        //         counter++;
+        //     ImGui::SameLine();
+        //     ImGui::Text("counter = %d", counter);
 
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
+        //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        //     ImGui::End();
+        // }
 
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
+        // // 3. Show another simple window.
+        // if (show_another_window)
+        // {
+        //     ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        //     ImGui::Text("Hello from another window!");
+        //     if (ImGui::Button("Close Me"))
+        //         show_another_window = false;
+        //     ImGui::End();
+        // }
 
-        // Rendering
-        ImGui::Render();
+        // // Rendering
+        // ImGui::Render();
         
-        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+        // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
     }
 
