@@ -38,24 +38,24 @@ example_sdl_opengl3/example_sdl_opengl3
 imgui.ini
 
 ## Android, SDL2, Gradle files
-android_sdl2_example/gradle.properties
-android_sdl2_example/gradlew
-android_sdl2_example/gradlew.bat
-android_sdl2_example/settings.gradle
-android_sdl2_example/gradle/*
-android_sdl2_example/build.gradle
-android_sdl2_example/.gradle
-android_sdl2_example/.settings
-android_sdl2_example/.project
+example_android_sdl_gles3/gradle.properties
+example_android_sdl_gles3/gradlew
+example_android_sdl_gles3/gradlew.bat
+example_android_sdl_gles3/settings.gradle
+example_android_sdl_gles3/gradle/*
+example_android_sdl_gles3/build.gradle
+example_android_sdl_gles3/.gradle
+example_android_sdl_gles3/.settings
+example_android_sdl_gles3/.project
 
-android_sdl2_example/app/proguard-rules.pro
-android_sdl2_example/app/libs/*
-android_sdl2_example/app/obj/*
-android_sdl2_example/app/build/*
-android_sdl2_example/app/.externalNativeBuild
-android_sdl2_example/app/.settings
+example_android_sdl_gles3/app/proguard-rules.pro
+example_android_sdl_gles3/app/libs/*
+example_android_sdl_gles3/app/obj/*
+example_android_sdl_gles3/app/build/*
+example_android_sdl_gles3/app/.externalNativeBuild
+example_android_sdl_gles3/app/.settings
 
-android_sdl2_example/app/src/main/java
-android_sdl2_example/app/src/main/res
+example_android_sdl_gles3/app/src/main/java
+example_android_sdl_gles3/app/src/main/res
 
 SDL*
