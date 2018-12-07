@@ -119,7 +119,6 @@ List of high-level Frameworks Bindings in this repository: (combine Platform + R
 
     imgui_impl_allegro5.cpp
     imgui_impl_marmalade.cpp
-    ADD_ANDROID_SDL_IMPL_HERE? <-----
 
 Third-party framework, graphics API and languages bindings are listed at:
 
@@ -207,12 +206,16 @@ example_sdl_opengl2/
     state, and might confuse your GPU driver. One star, not recommended. 
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl2.cpp
 
-android_sdl2_example/
-    You will need the Android SDK+NDK. You don't need Android Studio but it can make things easier!
-    1. Download Android SDK, https://developer.android.com/sdk/index.html, install API 18 at least.
-    2. Download latest Android NDK, https://developer.android.com/ndk/downloads/index.html, NDK-r15c or higher.
-    3. Export the Android SDK and NDK PATH `export PATH=$PATH:~/Android/android-ndk-r15c`. 
-        You should be able to run `ndk-build`, `adb ...`, and `gradle ...` commands in terminal.
+example_android_sdl_gles3/
+    You will need the Android SDK+NDK. You don't need Android Studio but it updating easier!
+    1. Download Android SDK, https://developer.android.com/sdk/index.html, and install API 18.
+    2. Download latest Android NDK, https://developer.android.com/ndk/downloads/index.html, (tested with NDK-r15c).
+    3. Export the Android SDK and NDK PATH:
+      - `export PATH=$PATH:~/Android/android-ndk-r15c`
+      - `export PATH=$PATH:~/Android/Sdk/platform-tools`
+      - `export PATH=$PATH:~/Android/Sdk/tools`
+        You should be able to run `ndk-build`, `adb`, and `android` commands in terminal.
+    4. See the `build_android.sh` script within the directory for commands to build and deploy
 
 sdl_opengl_example/
     SDL2 + OpenGL example.
