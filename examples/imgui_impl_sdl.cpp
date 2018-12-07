@@ -220,7 +220,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
     io.MouseDown[2] = g_MousePressed[2] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
     g_MousePressed[0] = g_MousePressed[1] = g_MousePressed[2] = false;
 
-#if SDL_HAS_CAPTURE_MOUSE && !defined(__EMSCRIPTEN__)
+#if SDL_HAS_CAPTURE_MOUSE && !(defined(__EMSCRIPTEN__) || defined(__ANDROID__))
     SDL_Window* focused_window = SDL_GetKeyboardFocus();
     if (g_Window == focused_window)
     {
@@ -284,5 +284,7 @@ void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
     g_Time = current_time;
 
     ImGui_ImplSDL2_UpdateMousePosAndButtons();
+#if !defined(__ANDROID__)
     ImGui_ImplSDL2_UpdateMouseCursor();
+#endif
 }

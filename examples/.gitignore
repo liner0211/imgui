@@ -54,6 +54,8 @@ example_android_sdl_gles3/app/obj/*
 example_android_sdl_gles3/app/build/*
 example_android_sdl_gles3/app/.externalNativeBuild
 example_android_sdl_gles3/app/.settings
+example_android_sdl_gles3/app/.project
+example_android_sdl_gles3/app/.classpath
 
 example_android_sdl_gles3/app/src/main/java
 example_android_sdl_gles3/app/src/main/res
