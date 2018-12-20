@@ -284,7 +284,5 @@ void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
     g_Time = current_time;
 
     ImGui_ImplSDL2_UpdateMousePosAndButtons();
-#if !defined(__ANDROID__)
     ImGui_ImplSDL2_UpdateMouseCursor();
-#endif
 }
