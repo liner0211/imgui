@@ -118,6 +118,7 @@ int main(int argc, char** argv)
 
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window) {
+			ImGui::SetNextWindowPos(ImVec2(0, 100), ImGuiSetCond_Once);
             ImGui::ShowDemoWindow(&show_demo_window);
         }
 
@@ -126,8 +127,10 @@ int main(int argc, char** argv)
             static float f = 0.0f;
             static int counter = 0;
 
+	        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.05, io.DisplaySize.y * 0.05), ImGuiSetCond_Once);
+
             ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-            ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiSetCond_FirstUseEver);
+    
             ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
             ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
             ImGui::Checkbox("Another Window", &show_another_window);
