@@ -207,7 +207,7 @@ example_sdl_opengl2/
     = main.cpp + imgui_impl_sdl.cpp + imgui_impl_opengl2.cpp
 
 example_android_sdl_gles3/
-    You will need the Android SDK+NDK. You don't need Android Studio but it updating easier!
+    You will need the Android SDK+NDK. You don't need Android Studio but it makes updating easier!
     1. Download Android SDK, https://developer.android.com/sdk/index.html, and install API 18.
     2. Download latest Android NDK, https://developer.android.com/ndk/downloads/index.html, (tested with NDK-r15c).
     3. Export the Android SDK and NDK PATH:
