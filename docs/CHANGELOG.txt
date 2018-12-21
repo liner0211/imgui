@@ -37,6 +37,8 @@ Breaking Changes:
 
 - Renamed io.ConfigResizeWindowsFromEdges to io.ConfigWindowsResizeFromEdges and removed its [Beta] mark.
   The addition of new configuration options in the Docking branch is pushing for a little reorganization of those names.
+- Made it illegal to call Begin("") with an empty string. This somehow accidentally worked before but had various 
+  undesirable side-effect as the window would have ID zero. In particular it is causing problems in viewport/docking branches.
 
 Other Changes:
 - Added BETA api for Tab Bar/Tabs widgets: (#261, #351)
@@ -60,6 +62,7 @@ Other Changes:
   This affects clamping window within the visible area: with this option enabled title bars need to be visible. (#899)
 - Window: Fixed using SetNextWindowPos() on a child window (which wasn't really documented) position the cursor as expected
   in the parent window, so there is no mismatch between the layout in parent and the position of the child window. 
+- IO: Added BackendPlatformUserData, BackendRendererUserData, BackendLanguageUserData void* for storage use by back-ends.
 - Style: Tweaked default value of style.DisplayWindowPadding from (20,20) to (19,19) so the default style as a value
   which is the same as the title bar height.
 - Demo: "Simple Layout" and "Style Editor" are now using tabs.
