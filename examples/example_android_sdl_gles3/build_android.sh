@@ -13,7 +13,7 @@ SDL2_LATEST='https://www.libsdl.org/release/SDL2-2.0.9.tar.gz'
 wget $SDL2_LATEST && tar xzf SDL2-2.0.9.tar.gz
 cp -rn ./SDL2-2.0.9/android-project/* ./
 cd ./app/jni/src
-mv ../../../SDL2-2.0.9 ./SDL
+mv ../../../SDL2-2.0.9 ../SDL
 
 # Gradle build commands (from top-level app directory)
 # ./gradlew installDebug

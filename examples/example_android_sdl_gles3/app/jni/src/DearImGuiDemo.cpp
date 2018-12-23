@@ -6,8 +6,7 @@
 // **Prefer using the code in the example_sdl_opengl3/ folder**
 // See imgui_impl_sdl.cpp for details.
 
-#include <string>
-#include <sstream>
+#include <string.h>
 #include <stdlib.h>
 
 #include <SDL.h>
@@ -65,15 +64,14 @@ int main(int argc, char** argv)
     const GLubyte* vendor = glGetString(GL_VENDOR);
     const GLubyte* version = glGetString(GL_VERSION);
     const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
-
-    std::stringstream ss;
-    ss << "\n-------------------------------------------------------------\n";
-    ss << "GL Vendor    : " << vendor;
-    ss << "\nGL GLRenderer : " << renderer;
-    ss << "\nGL Version   : " << version;
-    ss << "\nGLSL Version : " << glslVersion;
-    ss << "\n-------------------------------------------------------------\n";
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s", ss.str().c_str());
+    const char * new_line = "\n-------------------------------------------------------------\n";
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s%s%s%s%s%s%s%s%s%s", 
+        new_line,
+        "GL Vendor : ", vendor,
+        "\nGL GLRenderer : ", renderer,
+        "\nGL Version : ",  version,
+        "\nGLSL Version : ", glslVersion,
+        new_line);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
