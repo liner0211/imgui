@@ -1,4 +1,4 @@
-package com.libdearimgui.app;
+package org.libdearimgui.app;
         
 import org.libsdl.app.SDLActivity; 
 
