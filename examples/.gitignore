@@ -60,4 +60,5 @@ example_android_sdl_gles3/app/.classpath
 example_android_sdl_gles3/app/src/main/java
 example_android_sdl_gles3/app/src/main/res
 
-example_android_sdl_gles3/SDL/*
+example_android_sdl_gles3/SDL*
+example_android_sdl_gles3/app/jni/SDL
