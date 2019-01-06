@@ -48,6 +48,7 @@ example_android_sdl_gles3/.gradle
 example_android_sdl_gles3/.settings
 example_android_sdl_gles3/.project
 
+example_android_sdl_gles3/app/jni/Android.mk
 example_android_sdl_gles3/app/proguard-rules.pro
 example_android_sdl_gles3/app/libs/*
 example_android_sdl_gles3/app/obj/*
