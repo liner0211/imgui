@@ -57,6 +57,7 @@ example_android_sdl_gles3/app/.settings
 example_android_sdl_gles3/app/.project
 example_android_sdl_gles3/app/.classpath
 
+!example_android_sdl_gles3/app/src/main/java/org/libdearimgui/app/DearImguiActivity.java
 example_android_sdl_gles3/app/src/main/java
 example_android_sdl_gles3/app/src/main/res
 
