@@ -77,7 +77,8 @@ int main(int argc, char** argv)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    // Android issue: NoMouseCursorChange config on SDL_SetCursor is called which is an error
+    // Android issue: NoMouseCursorChange config prevents SDL_SetCursor call
+    // in imgui_impl_sdl.cpp which causes an error
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange | ImGuiConfigFlags_NavEnableKeyboard;
 
     // Setup Platform/Renderer bindings
