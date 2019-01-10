@@ -204,7 +204,7 @@ void ImGui::TextUnformatted(const char* text, const char* text_end)
         }
 
         ImRect bb(text_pos, text_pos + text_size);
-        ItemSize(bb);
+        ItemSize(text_size);
         ItemAdd(bb, 0);
     }
     else
@@ -282,10 +282,12 @@ void ImGui::TextWrapped(const char* fmt, ...)
 
 void ImGui::TextWrappedV(const char* fmt, va_list args)
 {
-    bool need_wrap = (GImGui->CurrentWindow->DC.TextWrapPos < 0.0f);    // Keep existing wrap position is one ia already set
-    if (need_wrap) PushTextWrapPos(0.0f);
+    bool need_backup = (GImGui->CurrentWindow->DC.TextWrapPos < 0.0f);  // Keep existing wrap position if one is already set
+    if (need_backup)
+        PushTextWrapPos(0.0f);
     TextV(fmt, args);
-    if (need_wrap) PopTextWrapPos();
+    if (need_backup)
+        PopTextWrapPos();
 }
 
 void ImGui::LabelText(const char* label, const char* fmt, ...)
@@ -397,8 +399,8 @@ bool ImGui::ButtonBehavior(const ImRect& bb, ImGuiID id, bool* out_hovered, bool
         g.HoveredWindow = window;
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
-    if (window->DC.LastItemId != id)
-        ImGuiTestEngineHook_ItemAdd(bb, id);
+    if (id != 0 && window->DC.LastItemId != id)
+        ImGuiTestEngineHook_ItemAdd(&g, bb, id);
 #endif
 
     bool pressed = false;
@@ -546,7 +548,7 @@ bool ImGui::ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags
     ImVec2 size = CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
 
     const ImRect bb(pos, pos + size);
-    ItemSize(bb, style.FramePadding.y);
+    ItemSize(size, style.FramePadding.y);
     if (!ItemAdd(bb, id))
         return false;
 
@@ -600,7 +602,7 @@ bool ImGui::InvisibleButton(const char* str_id, const ImVec2& size_arg)
     const ImGuiID id = window->GetID(str_id);
     ImVec2 size = CalcItemSize(size_arg, 0.0f, 0.0f);
     const ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size);
-    ItemSize(bb);
+    ItemSize(size);
     if (!ItemAdd(bb, id))
         return false;
 
@@ -3127,7 +3129,7 @@ bool ImGui::InputTextEx(const char* label, char* buf, int buf_size, const ImVec2
     IM_ASSERT(!((flags & ImGuiInputTextFlags_CallbackCompletion) && (flags & ImGuiInputTextFlags_AllowTabInput))); // Can't use both together (they both use tab key)
 
     ImGuiContext& g = *GImGui;
-    const ImGuiIO& io = g.IO;
+    ImGuiIO& io = g.IO;
     const ImGuiStyle& style = g.Style;
 
     const bool is_multiline = (flags & ImGuiInputTextFlags_Multiline) != 0;
@@ -3312,22 +3314,22 @@ bool ImGui::InputTextEx(const char* label, char* buf, int buf_size, const ImVec2
         if (edit_state.SelectedAllMouseLock && !io.MouseDown[0])
             edit_state.SelectedAllMouseLock = false;
 
-        if (io.InputCharacters[0])
+        if (io.InputQueueCharacters.Size > 0)
         {
             // Process text input (before we check for Return because using some IME will effectively send a Return?)
             // We ignore CTRL inputs, but need to allow ALT+CTRL as some keyboards (e.g. German) use AltGR (which _is_ Alt+Ctrl) to input certain characters.
             bool ignore_inputs = (io.KeyCtrl && !io.KeyAlt) || (is_osx && io.KeySuper);
             if (!ignore_inputs && is_editable && !user_nav_input_start)
-                for (int n = 0; n < IM_ARRAYSIZE(io.InputCharacters) && io.InputCharacters[n]; n++)
+                for (int n = 0; n < io.InputQueueCharacters.Size; n++)
                 {
                     // Insert character if they pass filtering
-                    unsigned int c = (unsigned int)io.InputCharacters[n];
+                    unsigned int c = (unsigned int)io.InputQueueCharacters[n];
                     if (InputTextFilterCharacter(&c, flags, callback, callback_user_data))
                         edit_state.OnKeyPressed((int)c);
                 }
 
             // Consume characters
-            memset(g.IO.InputCharacters, 0, sizeof(g.IO.InputCharacters));
+            io.InputQueueCharacters.resize(0);
         }
     }
 
@@ -5030,7 +5032,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     bb.Min.y -= spacing_U;
     bb.Max.x += spacing_R;
     bb.Max.y += spacing_D;
-    if (!ItemAdd(bb, (flags & ImGuiSelectableFlags_Disabled) ? 0 : id))
+    if (!ItemAdd(bb, id))
     {
         if ((flags & ImGuiSelectableFlags_SpanAllColumns) && window->DC.ColumnsSet)
             PushColumnClipRect();
@@ -6241,6 +6243,7 @@ void    ImGui::EndTabItem()
 
     IM_ASSERT(g.CurrentTabBar.Size > 0 && "Needs to be called between BeginTabBar() and EndTabBar()!");
     ImGuiTabBar* tab_bar = g.CurrentTabBar.back();
+    IM_ASSERT(tab_bar->LastTabItemIdx >= 0 && "Needs to be called between BeginTabItem() and EndTabItem()");
     ImGuiTabItem* tab = &tab_bar->Tabs[tab_bar->LastTabItemIdx];
     if (!(tab->Flags & ImGuiTabItemFlags_NoPushId))
         g.CurrentWindow->IDStack.pop_back();
@@ -6422,7 +6425,8 @@ bool    ImGui::TabItemEx(ImGuiTabBar* tab_bar, const char* label, bool* p_open, 
 
     // Tooltip (FIXME: Won't work over the close button because ItemOverlap systems messes up with HoveredIdTimer)
     if (g.HoveredId == id && !held && g.HoveredIdNotActiveTimer > 0.50f)
-        SetTooltip("%.*s", (int)(FindRenderedTextEnd(label) - label), label);
+        if (!(tab_bar->Flags & ImGuiTabBarFlags_NoTooltip))
+            SetTooltip("%.*s", (int)(FindRenderedTextEnd(label) - label), label);
 
     return tab_contents_visible;
 }
@@ -6542,7 +6546,7 @@ bool ImGui::TabItemLabelAndCloseButton(ImDrawList* draw_list, const ImRect& bb, 
 
         const float ellipsis_x = text_pixel_clip_bb.Min.x + label_size_clipped_x + 1.0f;
         if (!close_button_visible && ellipsis_x + ellipsis_width <= bb.Max.x)
-            RenderPixelEllipsis(draw_list, g.Font, ImVec2(ellipsis_x, text_pixel_clip_bb.Min.y), ellipsis_dot_count, GetColorU32(ImGuiCol_Text));
+            RenderPixelEllipsis(draw_list, ImVec2(ellipsis_x, text_pixel_clip_bb.Min.y), ellipsis_dot_count, GetColorU32(ImGuiCol_Text));
     }
     else
     {
