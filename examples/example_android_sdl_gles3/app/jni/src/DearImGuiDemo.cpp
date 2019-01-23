@@ -18,7 +18,7 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_opengl3.h>
 
-// Must use conventional parameters here 
+// Must use conventional parameters here
 // or else there will be an undefined reference to SDL_main
 int main(int argc, char** argv)
 {
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     SDL_GetCurrentDisplayMode(0, &current);
     SDL_Window* window = SDL_CreateWindow(nullptr,
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        current.w, current.h, 
+        current.w, current.h,
         SDL_WINDOW_OPENGL);
     if (window == 0)
     {
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     const GLubyte* version = glGetString(GL_VERSION);
     const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
     const char * new_line = "\n-------------------------------------------------------------\n";
-    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s%s%s%s%s%s%s%s%s%s", 
+    SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%s%s%s%s%s%s%s%s%s%s",
         new_line,
         "GL Vendor : ", vendor,
         "\nGL GLRenderer : ", renderer,
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     // Android issue: NoMouseCursorChange config prevents SDL_SetCursor call
-    // in imgui_impl_sdl.cpp which causes an error
+    // in imgui_impl_sdl.cpp; SDL_SetCursor causes invalid operation error spam
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange | ImGuiConfigFlags_NavEnableKeyboard;
 
     // Setup Platform/Renderer bindings
@@ -92,6 +92,16 @@ int main(int argc, char** argv)
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    // This is necessary to reposition the demo window
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+    ImGui::NewFrame();
+    ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x * 0.80, io.DisplaySize.y * 0.45), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.05, io.DisplaySize.y * 0.30), ImGuiCond_FirstUseEver);
+    ImGui::Begin("ImGui Demo");
+    ImGui::End();
+    ImGui::EndFrame();
 
     // Main loop
     bool done = false;
@@ -124,16 +134,16 @@ int main(int argc, char** argv)
         {
             static float f = 0.0f;
             static int counter = 0;
-            
+
             ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.05, io.DisplaySize.y * 0.05), ImGuiSetCond_Once);
-            
+
             ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-    
+
             ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
             ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
             ImGui::Checkbox("Another Window", &show_another_window);
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
             if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
@@ -162,7 +172,7 @@ int main(int argc, char** argv)
 
         // Rendering
         ImGui::Render();
-        
+
         //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
