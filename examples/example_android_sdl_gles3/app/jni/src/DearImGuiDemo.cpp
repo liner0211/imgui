@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     // Android issue: NoMouseCursorChange config prevents SDL_SetCursor call
     // in imgui_impl_sdl.cpp; SDL_SetCursor causes invalid operation error spam
     io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange | ImGuiConfigFlags_NavEnableKeyboard;
-
+    io.WantSaveIniSettings = false;
     // Setup Platform/Renderer bindings
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init();
